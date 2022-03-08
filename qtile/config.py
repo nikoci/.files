@@ -1,0 +1,1 @@
+/home/dehys/.config/qtile/config.py
