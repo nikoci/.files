@@ -24,6 +24,9 @@ vector<string> get_includes();
 int main(int argc, char *argv[]) {
     vector<string> entries;
     string user_home = getenv("HOME");
+    string nitrogen_cmd = "curl https://i.imgur.com/22G2GPV.jpg -o " + user_home + "/.wall.jpg && nitrogen --set-zoom-fill " + user_home + "/.wall.jpg";
+    system(nitrogen_cmd.c_str());
+
     user_home.append("/.config/");
 
     //Parse arguments, if set, match to .include
@@ -44,15 +47,19 @@ int main(int argc, char *argv[]) {
     //If no args, parse .include
     else entries = get_includes();
 
+    cout << "Checking '" << user_home << "'..." << endl;
     //Prepare user .config directory. Specifically, renaming specified configurations to 'filename.old',
     //appending '.old' as an extension to the file and not deleting it like a scumbag.
+    bool directory_match = false;
     for (const auto & dir : fs::directory_iterator(user_home)) {
         for (const auto & entry : entries) {
             if (dir.is_directory() && boost::iequals(dir.path().filename().string(), entry)){
+                directory_match = true;
                 for (const auto & file : fs::directory_iterator(dir.path())) {
                     fs::path f = file.path();
                     if (std::rename(f.string().c_str(), f.string().append(".old").c_str()) < 0) {
                         perror("Error moving file");
+                        return 0;
                     } else {
                         cout << "Successfully renamed file '" 
                                 << f.filename().string()
@@ -66,8 +73,13 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    if (directory_match) {
+        cout << "Preserved files in '" << user_home << "' for later use" << endl;
+    }
+
     //Loop through all entries and respective directories and move them
     for (const auto & entry : entries) {
+        cout << "Applying " << entry << " configurations..." << endl;
         for (const auto & file : fs::directory_iterator("./"+entry)){
             try { //Copy the file to respective location.
                 string fake_dir = user_home + entry;
@@ -82,9 +94,11 @@ int main(int argc, char *argv[]) {
     }
 
     cout << endl 
-            << "DONE, Enjoy my dot files :)" 
+            << "## DONE, Enjoy my dot files :)" 
             << endl 
             << "PS: You might need to restart X11 for changes to take effect." 
+            << endl
+            << "Please do star my repository: https://github.com/dehys/.files"
             << endl 
             << endl;
 
