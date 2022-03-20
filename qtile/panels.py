@@ -1,22 +1,12 @@
-import os
-import socket
-import subprocess
-
 from libqtile import bar, widget, qtile
 
 from colors import reaper
 from unicodes import lower_left_triangle
 
-user = os.getenv('USER')
-host = socket.gethostname()
-backlight = int(subprocess.getoutput("light -G").split(".")[0])
-
 wdefaults = dict(
-    #font="JetBrains Mono Nerd Font",
-    #font="ShureTechMono Nerd Font",
-    font="BM mini",
+    font="JetBrains Mono Nerd Font",
     foreground=reaper['foreground'],
-    fontsize=18,
+    fontsize=12,
     padding=0,
 )
 
@@ -31,31 +21,26 @@ bar = bar.Bar(
         widget.TextBox(
             background=reaper['black4'],
             text=" ",
-            fontsize=20,
             mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('firefox')}
         ),
         widget.TextBox(
             background=reaper['black4'],
             text=" ﬏ ",
-            fontsize=22,
             mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('code')}
         ),
         widget.TextBox(
             background=reaper['black4'],
             text="  ",
-            fontsize=22,
             mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('idea')}
         ),
         widget.TextBox(
             background=reaper['black4'],
             text="  ",
-            fontsize=22,
             mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('clion')}
         ),
         widget.TextBox(
             background=reaper['black4'],
             text="  ",
-            fontsize=22,
             mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('pycharm')}
         ),
         widget.Prompt(
@@ -72,14 +57,14 @@ bar = bar.Bar(
         widget.GroupBox(
             active=reaper['inactive'],
             inactive=reaper['inactive'],
-            fontsize=20,
+            fontsize=16,
             disable_drag=True,
             center_aligned=True,
             borderwidth=0,
             margin_x=0,
             padding_x=10,
             highlight_method='line',
-            block_highlight_text_color=reaper['highlight'],
+            block_highlight_text_color=reaper['magenta2'],
             highlight_color=reaper['background']
         ),
         widget.Spacer(length=bar.STRETCH),
@@ -89,62 +74,19 @@ bar = bar.Bar(
             background=reaper['black4']
         ),
         lower_left_triangle(reaper['black4'], reaper['green1']),
-        widget.Image(
-            background=reaper['green1'],
-            filename='~/.icons/pixelarticons/png/sort.png',
-            margin=4
-        ),
-        widget.Wlan(
-            interface='wlp1s0',
+        widget.CPU(
             background=reaper['green1'],
             foreground=reaper['background'],
-            disconnected_message='DOWN ',
-            format='UP ',
-            fontsize=16
+            format=' cpu {load_percent} '
         ),
-        widget.Image(
-            background=reaper['green1'],
-            filename='~/.icons/pixelarticons/png/sun.png',
-            margin=4
-        ),
-        widget.TextBox(
-            background=reaper['green1'],
-            foreground=reaper['background'],
-            text=f"{backlight}%",
-            fontsize=16
-        ),
-        widget.Image(
-            background=reaper['green1'],
-            filename='~/.icons/pixelarticons/png/volume.png',
-            margin=4
-        ),
-        widget.Volume(
-            background=reaper['green1'],
-            foreground=reaper['background'],
-            fmt='{} ',
-            fontsize=16
-        ),
-        widget.Image(
-            background=reaper['green1'],
-            filename='~/.icons/pixelarticons/png/battery.png',
-            margin=4
-        ),
-        widget.Battery(
-            background=reaper['green1'],
-            foreground=reaper['background'],
-            format='{percent:0.0%}  ',
-            low_foreground=reaper['red1'],
-            update_interval=10,
-            fontsize=16
-        ),
-        #lower_left_triangle(reaper['green1'], reaper['cyan1']),
         widget.TextBox(
             text="    ",
+            margin=10,
             background=reaper['green2'],
             foreground=reaper['background'] 
         )
     ],
 
-    size=32,
+    size=24,
     background=reaper['background']
 )
