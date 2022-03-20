@@ -24,7 +24,8 @@ vector<string> get_includes();
 int main(int argc, char *argv[]) {
     vector<string> entries;
     string user_home = getenv("HOME");
-    string nitrogen_cmd = "curl https://i.imgur.com/22G2GPV.jpg -o " + user_home + "/.wall.jpg && nitrogen --set-zoom-fill " + user_home + "/.wall.jpg";
+    //TODO: Check if curl and nitrogen are installed.
+    string nitrogen_cmd = "curl https://i.imgur.com/22G2GPV.jpg -o " + user_home + "/.wall.jpg && nitrogen --set-zoom-fill " + user_home + "/.wall.jpg --save";
     system(nitrogen_cmd.c_str());
 
     user_home.append("/.config/");
