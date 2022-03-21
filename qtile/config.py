@@ -1,38 +1,26 @@
-# Copyright (c) 2010 Aldo Cortesi
-# Copyright (c) 2010, 2014 dequis
-# Copyright (c) 2012 Randall Ma
-# Copyright (c) 2012-2014 Tycho Andersen
-# Copyright (c) 2012 Craig Barnes
-# Copyright (c) 2013 horsik
-# Copyright (c) 2013 Tao Sauvage
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# ▒▒▒▒▒▒▒▒▒▄██████     ▄▄▄█▄
+# ▒▒▒▒▒▒▒▄██▀░░▀██▄    ████████▄
+# ▒▒▒▒▒▒███░░░░░░██      █▀▀▀▀▀██▄▄
+# ▒▒▒▒▒▄██▌░░░░░░░██    ▐▌        ▀█▄
+# ▒▒▒▒▒███░░▐█░█▌░██    █▌          ▀▌
+# ▒▒▒▒████░▐█▌░▐█▌██   ██        ──────────────────────────────────────────────
+# ▒▒▒▐████░▐░░░░░▌██   █▌            QTile 'Reaper' configuration by Dehys
+# ▒▒▒▒████░░░▄█░░░██  ▐█         ──────────────────────────────────────────────
+# ▒▒▒▒████░░░██░░██▌  █▌         >   Version: 1.0.0
+# ▒▒▒▒████▌░▐█░░███   █          >   License: MIT
+# ▒▒▒▒▐████░░▌░███   ██          >   Author: Arijan (Dehys) Nikoci
+# ▒▒▒▒▒████░░░███    █▌
+# ▒▒▒██████▌░████   ██           Link: https://github.com/dehys/reaper-qtile/qtile
+# ▒▐████████████  ███            Github: https://github.com/dehys
+# ▒█████████████▄████            Website: https://dehys.com
+# ██████████████████             Discord: https://discord.gg/SxwUsgk
 
-from typing import List  # noqa: F401
-
-from libqtile import  layout, widget
+# ───────────────────────[Imports]───────────────────────
+from libqtile import layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
-
+from panels import bar, wdefaults
 from colors import reaper
-from panels import bar,  wdefaults
 
 # ──────────────────────[Variables]──────────────────────
 mod = "mod4"
@@ -41,6 +29,38 @@ browser = "firefox"
 
 # ─────────────────────[Keybindings]─────────────────────
 keys = [
+    #   <────────(Backlight/Volume)────────>
+    # Increase backlight brightness
+    Key(
+        [], "XF86MonBrightnessUp",
+        lazy.spawn("light -A 10"),
+        desc="Increase backlight brightness"
+    ),
+    # Decrease backlight brightness
+    Key(
+        [], "XF86MonBrightnessDown",
+        lazy.spawn("light -U 10"),
+        desc="Decrease backlight brightness"
+    ),
+    # Increase master volume
+    Key(
+        [], "XF86AudioRaiseVolume",
+        lazy.spawn("amixer set Master 5%+"),
+        desc="Increase master volume"
+    ),
+    # Decrease master volume
+    Key(
+        [], "XF86AudioLowerVolume",
+        lazy.spawn("amixer set Master 5%-"),
+        desc="Decrease master volume"
+    ),
+    # Toggle mute for master volume
+    Key(
+        [], "XF86AudioMute",
+        lazy.spawn("amixer set Master toggle"),
+        desc="Toggle mute for master volume"
+    ),
+
     #   <──────────(Applications)──────────>
     # Launch terminal
     Key(
@@ -53,16 +73,6 @@ keys = [
         [mod], "b",
         lazy.spawn(browser),
         desc="Launch browser"
-    ),
-    Key(
-        [mod], "e",
-        lazy.spawn("rofi -show window"),
-        desc="Launch rofi"
-    ),
-    Key(
-        [mod, "shift"], "r",
-        lazy.spawn("kitty -e ranger"),
-        desc="Launch ranger"
     ),
 
     #   <─────────────(Layout)─────────────>
@@ -169,17 +179,16 @@ keys = [
     ),
 ]
 
-
+# ───────────────────────[Groups]───────────────────────
 groups = [
-    Group('1', label="零", layout="colums"),
+    Group('1', label="零", layout="max"),
     Group('2', label="六", layout="colums"),
     Group('3', label="二", layout="colums"),
     Group('4', label="三", layout="colums"),
     Group('5', label="五", layout="colums"),
-    Group('6', label="四", layout="colums"),
+    Group('6', label="四", layout="floating"),
 ]
 
-# ───────────────────────[Groups]───────────────────────
 for i in groups:
     keys.extend(
         [
@@ -203,14 +212,14 @@ for i in groups:
 
 # ───────────────────────[Layout]───────────────────────
 layout_theme = {
-    "border_normal":  reaper['black1'],
-    "border_focus":  reaper['black1'],
+    "border_normal": reaper['blue2'],
+    "border_focus": reaper['blue2'],
     "margin": 20,
     "border_on_single": True
 }
 
 layouts = [
-    layout.Columns(**layout_theme, fair="TRUE", border_width=4,),
+    layout.Columns(**layout_theme, fair="TRUE", border_width=0),
     # layout.Floating(**layout_theme),
     # layout.Max(**layout_theme)
     # Try more layouts by unleashing below layouts.
@@ -230,8 +239,7 @@ layouts = [
 widget_defaults = wdefaults
 screens = [Screen(top=bar)]
 
-
-# Drag floating layouts.
+# ───────────────────────[Floating/Other]───────────────────────
 mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
     Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
@@ -241,8 +249,8 @@ mouse = [
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
 follow_mouse_focus = True
-bring_front_click = False
-cursor_warp = False
+bring_front_click = True
+cursor_warp = True
 floating_layout = layout.Floating(
     **layout_theme,
     border_width=4,
@@ -252,6 +260,8 @@ floating_layout = layout.Floating(
         Match(wm_class="confirmreset"),  # gitk
         Match(wm_class="makebranch"),  # gitk
         Match(wm_class="maketag"),  # gitk
+        Match(wm_class="nitrogen"),
+        Match(title="nitrogen"),
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
