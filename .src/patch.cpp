@@ -6,6 +6,7 @@
 */
 
 #include <cstdio>
+#include <cctype>
 #include <cstdlib>
 #include <iostream>
 #include <filesystem>
@@ -14,7 +15,6 @@
 #include <cstring>
 #include <cstdio>
 #include <algorithm>
-#include <boost/algorithm/string.hpp>
 
 using namespace std;
 namespace fs = filesystem;
@@ -54,11 +54,17 @@ int main(int argc, char *argv[]) {
     bool directory_match = false;
     for (const auto & dir : fs::directory_iterator(user_home)) {
         for (const auto & entry : entries) {
-            if (dir.is_directory() && boost::iequals(dir.path().filename().string(), entry)){
+            string filename_lwc = dir.path().filename().string();
+            transform(filename_lwc.begin(), filename_lwc.end(), filename_lwc.begin(),
+                [](unsigned char c){ return tolower(c); });
+            string entry_lwc = entry;
+            transform(entry_lwc.begin(), entry_lwc.end(), entry_lwc.begin(),
+                [](unsigned char c){ return tolower(c); });
+            if (dir.is_directory() && filename_lwc == entry_lwc){
                 directory_match = true;
                 for (const auto & file : fs::directory_iterator(dir.path())) {
                     fs::path f = file.path();
-                    if (std::rename(f.string().c_str(), f.string().append(".old").c_str()) < 0) {
+                    if (rename(f.string().c_str(), f.string().append(".old").c_str()) < 0) {
                         perror("Error moving file");
                         return 0;
                     } else {
@@ -94,15 +100,31 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    cout << endl 
-            << "## DONE, Enjoy my dot files :)" 
-            << endl 
-            << "PS: You might need to restart X11 for changes to take effect." 
-            << endl
-            << "Please do star my repository: https://github.com/dehys/.files"
-            << endl 
-            << endl;
+    char answer;
+    while (true) {
+        cout << endl << "Qtile needs to be restarted for some changes to take effect." << endl;
+        cout << "Would you like to restart qtile now? [y/n] ";
+        system("stty raw"); 
+        answer = getchar(); 
+        system("stty cooked"); 
+        if (answer == 'y' || answer == 'n') break;
+    }
 
+    switch (tolower(answer)) {
+        case 'y':
+            system("killall qtile");
+            break;
+        case 'n':
+            cout << endl << endl
+                << "## DONE, Enjoy my dot files :)" 
+                << endl 
+                << "PS: You might need to restart X11 for changes to take effect." 
+                << endl
+                << "Please do star my repository: https://github.com/dehys/.files"
+                << endl 
+                << endl;
+            break;
+    }
 }
 
 //Parsing of the .include file
