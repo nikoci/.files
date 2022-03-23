@@ -34,3 +34,22 @@ Optional: If you want to patch only a specific application, lets say `kitty` (se
 <br>
 
 > Patch and Update source code can be found in .src directory
+<br>
+<br>
+<br>
+
+# Qtile configuration
+
+<img src="https://i.imgur.com/Sjhm4Pb.png">
+
+**Software**:
+- qtile (Tiling window manager written and configured in python)
+- picom (Compositor for window managers)
+- kitty (Feature rich terminal emulator)
+- neofetch (Cli program that shows statistics of the current machine)
+- ranger (Tui file explorer)
+- rofi (Application launcher)
+
+```
+sudo pacman -S qtile picom kitty neofetch ranger rofi
+```
