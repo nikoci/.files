@@ -4,10 +4,33 @@ This is a collection of all the configurations I've managed to write for differe
 
 > Current: `qtile` <br>
 > Branch: https://github.com/dehys/.files/tree/qtile
-
+<br>
+<br>
 
 ### Table of contents
 | Configuration  | Branch | In use |
 | --------  | ------------------- | --------------------- |
 | qtile | [qtile](https://github.com/dehys/.files/tree/qtile) | Yes | 
 | qtile-laptop | [qtile-laptop](https://github.com/dehys/.files/tree/qtile-laptop) | Yes (laptop) | 
+<br>
+<br>
+
+### Installation of any configuration
+```
+git clone https://github.com/dehys/.files/ && cd ./.files
+```
+To switch to the configuration you want, replace `<branch>` with the branch name you see above
+```
+git checkout <branch>
+```
+Now use the patch executable to patch your system with the dotfiles
+```
+./patch
+```
+Optional: If you want to patch only a specific application, lets say `kitty` (see .include file for more options)
+```
+./patch kitty
+```
+<br>
+
+> Patch and Update source code can be found in .src directory
