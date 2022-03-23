@@ -10,4 +10,4 @@ This is a collection of all the configurations I've managed to write for differe
 | Configuration  | Branch | In use |
 | --------  | ------------------- | --------------------- |
 | qtile | [qtile](https://github.com/dehys/.files/tree/qtile) | Yes | 
-| qtile-laptop | [qtile-laptop]() | Yes (laptop) | 
+| qtile-laptop | [qtile-laptop](https://github.com/dehys/.files/tree/qtile-laptop) | Yes (laptop) | 
